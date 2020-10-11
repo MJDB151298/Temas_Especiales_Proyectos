@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import com.example.tarea2.helpers.PermissionHelpers;
 import com.example.tarea2.helpers.SwitchHelpers;
 import com.example.tarea2.helpers.TextViewHelpers;
 
@@ -20,9 +21,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> manifest_permissions = new ArrayList<>(Arrays.asList(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.CALL_PHONE,
-            Manifest.permission.READ_CONTACTS ));
+    ArrayList<String> manifest_permissions = PermissionHelpers.getManifestPermissions();
 
     private final int PERMISSION_CODE = 200;
 
