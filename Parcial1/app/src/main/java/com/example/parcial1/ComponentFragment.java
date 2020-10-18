@@ -92,11 +92,6 @@ public class ComponentFragment extends Fragment {
 
             }
         });
-       /** ArrayList<String> data = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1 , data);
-        listView.setAdapter(adapter);
-        data.add("Java");data.add("Python");data.add("Go");data.add("Ruby");data.add("PHP");data.add("C++");
-        adapter.notifyDataSetChanged();**/
     }
 
     public String getComponentDefinition(String component){
