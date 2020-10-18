@@ -1,5 +1,6 @@
 package com.example.parcial1;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,7 +83,10 @@ public class ComponentFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 DefinitionFragment definitionFragment = new DefinitionFragment();
                 definitionFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.fragment_container, definitionFragment);
+                if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    fragmentTransaction.replace(R.id.horizontal_container, definitionFragment);
+                else
+                    fragmentTransaction.replace(R.id.fragment_container, definitionFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
