@@ -51,14 +51,7 @@ public class Category {
     public static Category getCategoryByName(Context context, String name){
         DBManagerCategory dbManagerCategory = new DBManagerCategory(context).open();
         Cursor categories = dbManagerCategory.fetchByName(name);
-        Category category = null;
-        try{
-            while(categories.moveToNext()){
-                category = new Category(categories.getInt(1), categories.getString(0));
-            }
-        } finally {
-            categories.close();
-        }
+        Category category = new Category(categories.getInt(1), categories.getString(0));
         dbManagerCategory.close();
         return category;
     }

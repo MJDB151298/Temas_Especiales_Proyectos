@@ -1,11 +1,13 @@
 package com.example.parcial2;
 
 import android.os.Bundle;
+import android.view.*;
+import android.widget.Button;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.parcial2.entitites.Category;
@@ -78,6 +80,22 @@ public class ProductListFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
+        Toolbar toolbar = getActivity().findViewById(R.id.toolBar);
+        Menu menu = toolbar.getMenu();
+        MenuItem addNewProductMenuButton = menu.findItem(R.id.addNewProductMenuButton);
+        addNewProductMenuButton.setVisible(true);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                AddProductFragment addProductFragment = new AddProductFragment();
+                fragmentTransaction.replace(R.id.fragment_container, addProductFragment).addToBackStack(null);
+                fragmentTransaction.commit();
+                return true;
+            }
+        });
         return view;
     }
 }

@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         Toolbar toolbar = findViewById(R.id.toolBar);
         toolbar.inflateMenu(R.menu.menu_toolbar);
+        toolbar.setTitle("Parcial 2");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
