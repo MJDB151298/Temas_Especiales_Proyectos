@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.parcial2.database.DBManagerCategory;
+import com.example.parcial2.helpers.MenuItemHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +65,7 @@ public class AddCategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        MenuItemHelper.SwitchMenuItem(getActivity());
         return inflater.inflate(R.layout.fragment_add_category, container, false);
     }
 

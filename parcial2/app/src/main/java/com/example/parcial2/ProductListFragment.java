@@ -84,6 +84,7 @@ public class ProductListFragment extends Fragment {
         Menu menu = toolbar.getMenu();
         MenuItem addNewProductMenuButton = menu.findItem(R.id.addNewProductMenuButton);
         addNewProductMenuButton.setVisible(true);
+        addNewProductMenuButton.setEnabled(true);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

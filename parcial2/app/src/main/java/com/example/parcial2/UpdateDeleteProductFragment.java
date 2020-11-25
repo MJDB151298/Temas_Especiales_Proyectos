@@ -17,6 +17,8 @@ import com.example.parcial2.database.DBManagerProducts;
 import com.example.parcial2.entitites.Category;
 import com.example.parcial2.entitites.Product;
 import com.example.parcial2.helpers.FragmentHelper;
+import com.example.parcial2.helpers.MenuItemHelper;
+import com.example.parcial2.helpers.SpinnerHelper;
 
 import java.util.List;
 
@@ -74,6 +76,8 @@ public class UpdateDeleteProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_update_delete_product, container, false);
         Spinner categorySpinner = view.findViewById(R.id.categorySpinner);
 
+        MenuItemHelper.SwitchMenuItem(getActivity());
+
         Bundle bundle = getArguments();
         if(bundle != null && bundle.containsKey("PRODUCT_NAME")){
             TextView productNameTextView = view.findViewById(R.id.productNameTextView);
@@ -86,11 +90,7 @@ public class UpdateDeleteProductFragment extends Fragment {
         }
 
         //Llenando el spinner con las categorias
-        List<String> categoryList = Category.getCategories(this.getContext());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this.getContext(), android.R.layout.simple_spinner_item, categoryList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categorySpinner.setAdapter(adapter);
+        ArrayAdapter<String> adapter = SpinnerHelper.fillCategorySpinner(categorySpinner, getContext());
 
         if(bundle != null && bundle.containsKey("CATEGORY_NAME")){
             int position = adapter.getPosition(bundle.getString("CATEGORY_NAME"));
@@ -126,13 +126,9 @@ public class UpdateDeleteProductFragment extends Fragment {
                 bundle.putString("PRODUCT_PRICE", Integer.toString(productPrice));
                 bundle.putBoolean("PRODUCT_UPDATE", true);
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
                 AddCategoryFragment addCategoryFragment = new AddCategoryFragment();
                 addCategoryFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.fragment_container, addCategoryFragment).addToBackStack(null);
-                fragmentTransaction.commit();
+                FragmentHelper.ReplaceFragment(addCategoryFragment, getActivity());
             }
         });
 
@@ -150,12 +146,11 @@ public class UpdateDeleteProductFragment extends Fragment {
 
                 Category category = Category.getCategoryByName(v.getContext(), categorySpinner.getSelectedItem().toString());
                 Product product = new Product(receivedBundle.getInt("PRODUCT_ID"), productName, productPrice, category);
-                System.out.println(category.getId() + " - " + category.getName());
                 DBManagerProducts dbManagerProducts = new DBManagerProducts(v.getContext()).open();
                 dbManagerProducts.update(product);
                 dbManagerProducts.close();
 
-                FragmentHelper.ReplaceFragment(new ProductListFragment(), getActivity());
+                FragmentHelper.AddFragment(new ProductListFragment(), getActivity());
             }
         });
         
@@ -175,7 +170,7 @@ public class UpdateDeleteProductFragment extends Fragment {
                                 dbManagerProducts.delete(receivedBundle.getInt("PRODUCT_ID"));
                                 dbManagerProducts.close();
 
-                                FragmentHelper.ReplaceFragment(new ProductListFragment(), getActivity());
+                                FragmentHelper.AddFragment(new ProductListFragment(), getActivity());
                             }
 
                         })

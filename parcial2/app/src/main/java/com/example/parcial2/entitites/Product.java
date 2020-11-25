@@ -44,6 +44,26 @@ public class Product {
         return productList;
     }
 
+    public static boolean isCategoryInProduct(Context context, Category category){
+        boolean result = false;
+        DBManagerProducts dbManagerProducts = new DBManagerProducts(context).open();
+        DBManagerCategory dbManagerCategory = new DBManagerCategory(context).open();
+        Cursor products = dbManagerProducts.fetch();
+        try{
+            while(products.moveToNext()){
+                int categoryId = dbManagerCategory.fetchByID(products.getInt(3)).getInt(1);
+                if(categoryId == category.getId()){
+                    result = true;
+                }
+            }
+        }finally {
+            products.close();
+        }
+        dbManagerProducts.close();
+        dbManagerCategory.close();
+        return result;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,17 +1,24 @@
 package com.example.parcial2;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.*;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import com.example.parcial2.database.DBManagerCategory;
 import com.example.parcial2.database.DBManagerProducts;
 import com.example.parcial2.entitites.Category;
+import com.example.parcial2.entitites.Product;
+import com.example.parcial2.helpers.FragmentHelper;
+import com.example.parcial2.helpers.MenuItemHelper;
+import com.example.parcial2.helpers.SpinnerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +76,7 @@ public class AddProductFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_product, container, false);
 
+        MenuItemHelper.SwitchMenuItem(getActivity());
 
         Bundle bundle = getArguments();
         if(bundle != null && bundle.containsKey("PRODUCT_NAME")){
@@ -82,12 +90,8 @@ public class AddProductFragment extends Fragment {
         }
 
         //Llenando el spinner con las categorias
-        List<String> categoryList = Category.getCategories(this.getContext());
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this.getContext(), android.R.layout.simple_spinner_item, categoryList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner categorySpinner = (Spinner) view.findViewById(R.id.categorySpinner);
-        categorySpinner.setAdapter(adapter);
+        Spinner categorySpinner = view.findViewById(R.id.categorySpinner);
+        ArrayAdapter<String> adapter = SpinnerHelper.fillCategorySpinner(categorySpinner, getContext());
 
         if(bundle != null && bundle.containsKey("CATEGORY_NAME")){
             int position = adapter.getPosition(bundle.getString("CATEGORY_NAME"));
@@ -105,6 +109,7 @@ public class AddProductFragment extends Fragment {
         final TextView productPriceText = getView().findViewById(R.id.productPriceTextView);
         final Button saveProductButton = getView().findViewById(R.id.saveProductButton);
         Button addCategoryButton = getView().findViewById(R.id.addCategoryButton);
+        Button deleteCategoryButton = getView().findViewById(R.id.deleteCategoryButton);
         final Spinner categorySpinner = getView().findViewById(R.id.categorySpinner);
         saveProductButton.setEnabled(false);
 
@@ -172,12 +177,7 @@ public class AddProductFragment extends Fragment {
                 dbManagerProducts.insert(productName, productPrice, category.getId());
                 dbManagerProducts.close();
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
-                ProductListFragment productListFragment = new ProductListFragment();
-                fragmentTransaction.add(R.id.fragment_container, productListFragment);
-                fragmentTransaction.commit();
+                FragmentHelper.AddFragment(new ProductListFragment(), getActivity());
             }
         });
 
@@ -195,14 +195,53 @@ public class AddProductFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("PRODUCT_NAME", productName);
                 bundle.putString("PRODUCT_PRICE", Integer.toString(productPrice));
-
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
                 AddCategoryFragment addCategoryFragment = new AddCategoryFragment();
                 addCategoryFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.fragment_container, addCategoryFragment, "ADD_CATEGORY").addToBackStack(null);
-                fragmentTransaction.commit();
+                FragmentHelper.ReplaceFragment(addCategoryFragment, getActivity());
+            }
+        });
+
+        deleteCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String productName = productNameTextView.getText().toString();
+                int productPrice = 0;
+                try{
+                    productPrice = Integer.parseInt(productPriceText.getText().toString());
+                }catch(Exception e){
+                    System.out.println("OOPS");
+                }
+
+                final Category category = Category.getCategoryByName(getContext(), categorySpinner.getSelectedItem().toString());
+                if(Product.isCategoryInProduct(getContext(), category)){
+                    new AlertDialog.Builder(getContext())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Error")
+                            .setMessage("Categoria se encuentra en uso")
+                            .setNeutralButton("Ok", null)
+                            .show();
+                }
+                else{
+                    new AlertDialog.Builder(getContext())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Borrar Categoria")
+                            .setMessage("Esta seguro que desea eliminar esta categoria?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    System.out.println(category.getId() + " - " + category.getName());
+                                    DBManagerCategory dbManagerCategory = new DBManagerCategory(getContext()).open();
+                                    dbManagerCategory.delete(category.getId());
+                                    SpinnerHelper.fillCategorySpinner(categorySpinner, getContext());
+                                    dbManagerCategory.close();
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
+                }
             }
         });
     }

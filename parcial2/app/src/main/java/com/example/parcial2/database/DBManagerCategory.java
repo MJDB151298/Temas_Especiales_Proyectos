@@ -32,6 +32,11 @@ public class DBManagerCategory {
         database.insert(DatabaseHelper.TABLE_NAME_CATEGORIES, null, values);
     }
 
+    public Boolean delete(int id) {
+        database.delete(DatabaseHelper.TABLE_NAME_CATEGORIES, "id = ?", new String[]{Integer.toString(id)});
+        return Boolean.TRUE;
+    }
+
     public Cursor fetch() {
         String[] columns = new String[]{DatabaseHelper.NAME, DatabaseHelper.CATEGORY_ID};
         Cursor cursor = database.query(DatabaseHelper.TABLE_NAME_CATEGORIES, columns, null, null, null, null, null);

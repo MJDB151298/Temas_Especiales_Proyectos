@@ -45,5 +45,12 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_bias="0.542" app:layout_constraintTop_toBottomOf="@+id/categorySpinner"
                 android:layout_marginTop="28dp"/>
+        <Button
+                android:text="Delete Category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/deleteCategoryButton"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.557"
+                app:layout_constraintTop_toBottomOf="@+id/saveProductButton" android:layout_marginTop="20dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
