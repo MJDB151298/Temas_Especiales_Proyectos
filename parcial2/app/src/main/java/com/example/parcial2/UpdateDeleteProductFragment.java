@@ -1,10 +1,12 @@
 package com.example.parcial2;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.parcial2.database.DBManagerProducts;
 import com.example.parcial2.entitites.Category;
 import com.example.parcial2.entitites.Product;
+import com.example.parcial2.helpers.FragmentHelper;
 
 import java.util.List;
 
@@ -152,12 +155,33 @@ public class UpdateDeleteProductFragment extends Fragment {
                 dbManagerProducts.update(product);
                 dbManagerProducts.close();
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
-                ProductListFragment productListFragment = new ProductListFragment();
-                fragmentTransaction.add(R.id.fragment_container, productListFragment);
-                fragmentTransaction.commit();
+                FragmentHelper.ReplaceFragment(new ProductListFragment(), getActivity());
+            }
+        });
+        
+        deleteProductButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Borrar Producto")
+                        .setMessage("Esta seguro que desea eliminar este producto?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Bundle receivedBundle = getArguments();
+                                DBManagerProducts dbManagerProducts = new DBManagerProducts(getView().getContext()).open();
+                                dbManagerProducts.delete(receivedBundle.getInt("PRODUCT_ID"));
+                                dbManagerProducts.close();
+
+                                FragmentHelper.ReplaceFragment(new ProductListFragment(), getActivity());
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
             }
         });
     }

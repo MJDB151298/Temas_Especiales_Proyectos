@@ -40,6 +40,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ProductListAdapter.ProductViewHolder holder, int position) {
+        System.out.println("Añadiendo en la posicion: " + position);
         holder.bindData(products.get(position));
     }
 
