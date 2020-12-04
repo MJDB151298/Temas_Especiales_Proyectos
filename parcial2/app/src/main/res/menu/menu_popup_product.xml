@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/editProductItem" android:title="Editar Producto"
+          android:icon="@drawable/baseline_create_black_18dp" android:enabled="true" android:visible="false"
+          />
+    <item android:id="@+id/deleteProductItem" android:title="Eliminar Producto"
+          android:icon="@drawable/baseline_create_black_18dp" android:enabled="true" android:visible="false"
+    />
+</menu>

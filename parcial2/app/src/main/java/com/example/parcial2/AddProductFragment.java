@@ -16,9 +16,11 @@ import com.example.parcial2.database.DBManagerCategory;
 import com.example.parcial2.database.DBManagerProducts;
 import com.example.parcial2.entitites.Category;
 import com.example.parcial2.entitites.Product;
+import com.example.parcial2.helpers.ButtonHelper;
 import com.example.parcial2.helpers.FragmentHelper;
 import com.example.parcial2.helpers.MenuItemHelper;
 import com.example.parcial2.helpers.SpinnerHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +79,9 @@ public class AddProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_product, container, false);
 
         MenuItemHelper.SwitchMenuItem(getActivity());
+
+        //Ocultando el float action button
+        ButtonHelper.SwitchCallCreateProductButton((FloatingActionButton) getActivity().findViewById(R.id.callCreateProductButton), true);
 
         Bundle bundle = getArguments();
         if(bundle != null && bundle.containsKey("PRODUCT_NAME")){

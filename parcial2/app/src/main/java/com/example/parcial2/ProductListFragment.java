@@ -1,20 +1,27 @@
 package com.example.parcial2;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.parcial2.entitites.Category;
 import com.example.parcial2.entitites.Product;
+import com.example.parcial2.helpers.ButtonHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,10 +34,13 @@ public class ProductListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static int RESULT_LOAD_IMAGE = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ImageView productImage;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -74,6 +84,9 @@ public class ProductListFragment extends Fragment {
         List<Product> productList = Product.getProducts(this.getContext());
         System.out.println("El size de productos es: " + productList.size());
 
+        //Mostrando el float action button
+        ButtonHelper.SwitchCallCreateProductButton((FloatingActionButton) getActivity().findViewById(R.id.callCreateProductButton), false);
+
         RecyclerView recyclerView = view.findViewById(R.id.productRecyclerView);
         ProductListAdapter productListAdapter = new ProductListAdapter(this.getContext(), productList, this.getActivity());
         recyclerView.setAdapter(productListAdapter);
@@ -99,4 +112,12 @@ public class ProductListFragment extends Fragment {
         });
         return view;
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //Mostrando el float action button
+        ButtonHelper.SwitchCallCreateProductButton((FloatingActionButton) getActivity().findViewById(R.id.callCreateProductButton), false);
+    }
+
 }

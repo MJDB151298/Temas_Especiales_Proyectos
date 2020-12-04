@@ -6,6 +6,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/callCreateProductButton"
+            android:layout_width="wrap_content"
+            android:layout_height="74dp"
+            android:layout_margin="16dp"
+            android:contentDescription="Añadir producto"
+            app:srcCompat="@drawable/baseline_add_white_18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"/>
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_height="wrap_content"
@@ -28,4 +37,5 @@
             android:id="@+id/fragment_container" android:layout_marginTop="60dp">
 
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
